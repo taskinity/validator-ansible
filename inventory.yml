@@ -1,0 +1,29 @@
+---
+all:
+  children:
+    local:
+      hosts:
+        localhost:
+          ansible_connection: local
+          environment: dev
+
+    development:
+      hosts:
+        dev-server-01:
+          ansible_host: 10.0.1.10
+          environment: dev
+
+    staging:
+      hosts:
+        staging-server:
+          ansible_host: 10.0.2.10
+          environment: staging
+
+    production:
+      hosts:
+        prod-server-01:
+          ansible_host: 10.0.3.10
+          environment: production
+        prod-server-02:
+          ansible_host: 10.0.3.11
+          environment: production

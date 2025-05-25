@@ -1,0 +1,17 @@
+---
+http_endpoints:
+  - name: "API Health Check"
+    url: "{{ api_health_endpoint | default('https://httpbin.org/status/200') }}"
+    method: GET
+    expected_status: 200
+    timeout: "{{ web_timeout | default(10) }}"
+
+  - name: "External API 1"
+    url: "{{ external_api_1 | default('https://api.github.com') }}"
+    method: GET
+    expected_status: 200
+
+  - name: "External API 2"
+    url: "{{ external_api_2 | default('https://jsonplaceholder.typicode.com/posts/1') }}"
+    method: GET
+    expected_status: 200

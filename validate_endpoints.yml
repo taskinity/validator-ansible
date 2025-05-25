@@ -1,0 +1,134 @@
+# 🎯 ANSIBLE ENDPOINT VALIDATOR - Main Playbook
+# Minimalist approach: Maximum protocols, minimum code
+
+---
+- name: "🔍 Ultimate Endpoint Validation"
+  hosts: "{{ target_hosts | default('all') }}"
+  gather_facts: true
+  vars:
+    env: "{{ environment | default('dev') }}"
+    protocols_dir: "{{ playbook_dir }}/protocols"
+
+  vars_files:
+    - "environments/{{ env }}.yml"
+
+  pre_tasks:
+    - name: "📋 Load protocol configurations"
+      include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ protocols_dir }}/*/endpoints.yml"
+      tags: always
+
+    - name: "🔧 Load .env files"
+      shell: |
+        if [ -f "{{ item }}/.env" ]; then
+          cat "{{ item }}/.env" | grep -v '^#' | grep '=' || true
+        fi
+      with_fileglob:
+        - "{{ protocols_dir }}/*"
+      register: env_contents
+      tags: always
+
+  tasks:
+    # 🌐 HTTP/HTTPS Validation (1 task = all endpoints)
+    - name: "🌐 HTTP/HTTPS Endpoints"
+      uri:
+        url: "{{ item.url }}"
+        method: "{{ item.method | default('GET') }}"
+        timeout: "{{ item.timeout | default(10) }}"
+        status_code: "{{ item.expected_status | default(200) }}"
+      loop: "{{ http_endpoints | default([]) }}"
+      register: http_results
+      failed_when: false
+      tags: [http, web]
+
+    # 💾 Database Validation (1 task per DB type)
+    - name: "💾 PostgreSQL Connection"
+      postgresql_ping: "{{ database_endpoints.postgres }}"
+      register: postgres_result
+      failed_when: false
+      when: database_endpoints.postgres is defined
+      tags: [database, postgres]
+
+    - name: "💾 MySQL Connection"
+      mysql_ping: "{{ database_endpoints.mysql }}"
+      register: mysql_result
+      failed_when: false
+      when: database_endpoints.mysql is defined
+      tags: [database, mysql]
+
+    - name: "💾 MongoDB Connection"
+      mongodb_ping: "{{ database_endpoints.mongodb }}"
+      register: mongodb_result
+      failed_when: false
+      when: database_endpoints.mongodb is defined
+      tags: [database, mongodb]
+
+    - name: "💾 Redis Connection"
+      redis: "{{ database_endpoints.redis }}"
+      register: redis_result
+      failed_when: false
+      when: database_endpoints.redis is defined
+      tags: [database, redis]
+
+    # 📁 File System Validation
+    - name: "📁 File System Paths"
+      stat:
+        path: "{{ item.path }}"
+      loop: "{{ file_endpoints | default([]) }}"
+      register: file_results
+      tags: [filesystem, files]
+
+    # 🔌 Network Services Validation
+    - name: "🔌 Network Services"
+      wait_for:
+        host: "{{ item.host }}"
+        port: "{{ item.port }}"
+        timeout: "{{ item.timeout | default(5) }}"
+        state: started
+      loop: "{{ network_services | default([]) }}"
+      register: network_results
+      failed_when: false
+      tags: [network, tcp]
+
+    # 📧 Email Service Validation
+    - name: "📧 SMTP Service"
+      mail:
+        to: "{{ email_config.to }}"
+        subject: "Ansible Validation Test"
+        body: "This is a test email from Ansible validation"
+        host: "{{ email_config.host }}"
+        port: "{{ email_config.port }}"
+        username: "{{ email_config.username | default(omit) }}"
+        password: "{{ email_config.password | default(omit) }}"
+        secure: "{{ email_config.secure | default(omit) }}"
+        dry_run: true
+      register: email_result
+      failed_when: false
+      when: email_config is defined
+      tags: [email, smtp]
+
+    # 📊 Generate Validation Report
+    - name: "📊 Generate HTML Report"
+      template:
+        src: "templates/report.html.j2"
+        dest: "{{ playbook_dir }}/reports/validation_{{ inventory_hostname }}_{{ ansible_date_time.epoch }}.html"
+      delegate_to: localhost
+      run_once: true
+      tags: [report]
+
+    # 📋 Display Summary
+    - name: "📋 Validation Summary"
+      debug:
+        msg: |
+          🎯 ENDPOINT VALIDATION COMPLETED
+          ================================
+          Host: {{ inventory_hostname }}
+          Environment: {{ env }}
+          Timestamp: {{ ansible_date_time.iso8601 }}
+
+          Results Summary:
+          ✅ HTTP: {{ (http_results.results | default([]) | selectattr('status', 'equalto', 200) | list | length) }}/{{ (http_endpoints | default([]) | length) }}
+          ✅ Files: {{ (file_results.results | default([]) | selectattr('stat.exists', 'equalto', true) | list | length) }}/{{ (file_endpoints | default([]) | length) }}
+          ✅ Network: {{ (network_results.results | default([]) | rejectattr('failed', 'equalto', true) | list | length) }}/{{ (network_services | default([]) | length) }}
+      tags: [summary]

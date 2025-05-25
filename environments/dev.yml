@@ -1,0 +1,7 @@
+---
+# Development Environment Configuration
+environment_name: "Development"
+api_timeout: 10
+network_timeout: 5
+enable_debug: true
+report_format: "html"

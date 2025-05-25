@@ -1,0 +1,8 @@
+---
+# Production Environment Configuration
+environment_name: "Production"
+api_timeout: 30
+network_timeout: 10
+enable_debug: false
+report_format: "html"
+strict_validation: true

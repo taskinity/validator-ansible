@@ -1,0 +1,16 @@
+---
+network_services:
+  - name: "SSH Service"
+    host: "{{ ssh_host | default('localhost') }}"
+    port: "{{ ssh_port | default(22) }}"
+    timeout: 5
+
+  - name: "DNS Service"
+    host: "{{ dns_host | default('8.8.8.8') }}"
+    port: "{{ dns_port | default(53) }}"
+    timeout: 3
+
+  - name: "NTP Service"
+    host: "{{ ntp_host | default('pool.ntp.org') }}"
+    port: "{{ ntp_port | default(123) }}"
+    timeout: 5

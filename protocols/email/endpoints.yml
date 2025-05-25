@@ -1,0 +1,9 @@
+---
+email_config:
+  host: "{{ smtp_host | default('localhost') }}"
+  port: "{{ smtp_port | default(25) }}"
+  username: "{{ smtp_user | default('') }}"
+  password: "{{ smtp_password | default('') }}"
+  secure: "{{ smtp_tls | default(false) }}"
+  from: "{{ smtp_from | default('test@example.com') }}"
+  to: "{{ smtp_to | default('recipient@example.com') }}"

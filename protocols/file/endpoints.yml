@@ -1,0 +1,21 @@
+---
+file_endpoints:
+  - path: "{{ input_dir | default('/tmp/input') }}"
+    name: "Input Directory"
+    required: true
+
+  - path: "{{ output_dir | default('/tmp/output') }}"
+    name: "Output Directory"
+    required: true
+
+  - path: "{{ error_dir | default('/tmp/error') }}"
+    name: "Error Directory"
+    required: false
+
+  - path: "{{ config_dir | default('/etc/myapp') }}"
+    name: "Config Directory"
+    required: true
+
+  - path: "{{ log_dir | default('/var/log/myapp') }}"
+    name: "Log Directory"
+    required: false

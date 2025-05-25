@@ -1,73 +1,3 @@
-# 📁 ANSIBLE ENDPOINT VALIDATOR - Struktura Projektu
-
-```
-ansible-endpoint-validator/
-├── 📄 README.md                          # Dokumentacja projektu
-├── 🔧 setup.sh                           # Instalator wszystkich dependencies
-├── 🚀 validate.sh                        # Quick launcher
-├── ⚙️  ansible.cfg                        # Konfiguracja Ansible
-├── 📋 inventory.yml                       # Hosty i grupy
-├── 🎯 validate_endpoints.yml              # Główny playbook
-├── 📁 environments/                       # Konfiguracje środowisk
-│   ├── dev.yml                           # Development
-│   ├── staging.yml                       # Staging  
-│   ├── production.yml                    # Production
-│   └── local.yml                         # Local testing
-├── 📁 protocols/                          # Konfiguracje protokołów (.env per protokół)
-│   ├── http/
-│   │   ├── .env                          # HTTP endpoints config
-│   │   └── endpoints.yml                 # Structured config
-│   ├── database/
-│   │   ├── .env                          # DB connections
-│   │   └── endpoints.yml
-│   ├── file/
-│   │   ├── .env                          # File paths
-│   │   └── endpoints.yml
-│   ├── network/
-│   │   ├── .env                          # TCP/UDP services
-│   │   └── endpoints.yml
-│   ├── email/
-│   │   ├── .env                          # SMTP config
-│   │   └── endpoints.yml
-│   ├── ftp/
-│   │   ├── .env                          # FTP servers
-│   │   └── endpoints.yml
-│   ├── cloud/
-│   │   ├── .env                          # AWS/Azure/GCP
-│   │   └── endpoints.yml
-│   ├── messaging/
-│   │   ├── .env                          # RabbitMQ/Kafka
-│   │   └── endpoints.yml
-│   ├── ldap/
-│   │   ├── .env                          # LDAP/AD
-│   │   └── endpoints.yml
-│   └── containers/
-│       ├── .env                          # Docker/K8s
-│       └── endpoints.yml
-├── 📁 templates/                          # Jinja2 templates
-│   ├── report.html.j2                    # Main HTML report
-│   ├── summary.json.j2                   # JSON summary
-│   └── slack_notification.j2             # Slack webhook
-├── 📁 reports/                            # Generated reports
-│   └── .gitkeep                          
-├── 📁 scripts/                            # Helper scripts
-│   ├── generate_configs.sh               # Auto-generate protocol configs
-│   ├── deploy.sh                         # Deploy to environments
-│   └── cleanup.sh                        # Clean old reports
-└── 🧪 tests/                             # Validation tests
-    ├── test_playbook.yml                 # Test the playbook itself
-    └── mock_endpoints.yml                # Mock services for testing
-```
-## 📊 Statystyki
-- **Pliki konfiguracyjne**: 20+
-- **Protokoły**: 10
-- **Środowiska**: 4  
-- **Łączny rozmiar**: ~50KB (bez reportów)
-- **Setup time**: < 2 minuty
-
-
-
-
 
 
 ---
@@ -164,8 +94,10 @@ ansible-endpoint-validator/
 │   └── report.html.j2            # HTML report template
 └── 📊 reports/                    # Generated reports
 
-Total: ~20 files, 50KB, setup in 2 minutes
+Total: ~20 files, 50KB
 ```
+
+
 
 ## ⚙️ Configuration
 

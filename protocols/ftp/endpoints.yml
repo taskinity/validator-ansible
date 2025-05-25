@@ -1,0 +1,7 @@
+---
+ftp_services:
+  - host: "{{ ftp_host | default('localhost') }}"
+    port: "{{ ftp_port | default(21) }}"
+    username: "{{ ftp_user | default('') }}"
+    password: "{{ ftp_password | default('') }}"
+    name: "FTP Server"

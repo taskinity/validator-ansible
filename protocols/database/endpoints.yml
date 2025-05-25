@@ -1,0 +1,26 @@
+---
+database_endpoints:
+  postgres:
+    login_host: "{{ postgres_host | default('localhost') }}"
+    login_port: "{{ postgres_port | default(5432) }}"
+    login_user: "{{ postgres_user | default('postgres') }}"
+    login_password: "{{ postgres_password | default('') }}"
+    login_db: "{{ postgres_db | default('postgres') }}"
+
+  mysql:
+    login_host: "{{ mysql_host | default('localhost') }}"
+    login_port: "{{ mysql_port | default(3306) }}"
+    login_user: "{{ mysql_user | default('root') }}"
+    login_password: "{{ mysql_password | default('') }}"
+    login_db: "{{ mysql_db | default('mysql') }}"
+
+  mongodb:
+    hosts: "{{ mongo_host | default('localhost') }}:{{ mongo_port | default(27017) }}"
+    database: "{{ mongo_db | default('admin') }}"
+    username: "{{ mongo_user | default('') }}"
+    password: "{{ mongo_password | default('') }}"
+
+  redis:
+    host: "{{ redis_host | default('localhost') }}"
+    port: "{{ redis_port | default(6379) }}"
+    password: "{{ redis_password | default('') }}"
